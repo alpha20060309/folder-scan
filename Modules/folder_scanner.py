@@ -1,10 +1,11 @@
 import os
-from file_operations import extract_info_from_mhtml
+from Modules.file_operations import extract_info_from_mhtml
 
-PRIORITY_FOLDERS = ["@ Bads", "@ Other", "@ Weak", "@ Dead"]  # Folders to scan first
+PRIORITY_FOLDERS = {"@ Bads", "@ Other", "@ Weak", "@ Dead"}  # Use a set for faster membership checking
 
 def scan_folder(folder_path, md_file):
     """Scans a folder for MHTML files and writes to the markdown file."""
+    extracted_entries = []  # List to accumulate entries for batch writing
     for root, dirs, files in os.walk(folder_path):
         # Skip folders containing '- Theory' in their name (both direct and subfolder levels)
         dirs[:] = [d for d in dirs if '- Theory' not in d]
@@ -22,9 +23,12 @@ def scan_folder(folder_path, md_file):
                     # Check if folder is a priority folder and write its name
                     if any(priority_folder in root for priority_folder in PRIORITY_FOLDERS):
                         folder_name = next(priority_folder for priority_folder in PRIORITY_FOLDERS if priority_folder in root)
-                        md_file.write(f"{folder_name}\n")
-                    md_file.write(f"[{url}] - {subject}\n")
+                        extracted_entries.append(f"{folder_name}\n")
+                    extracted_entries.append(f"[{url}] - {subject}\n")
                     print(f"Extracted: {url} - {subject}")
+
+    # Write all entries to the markdown file at once
+    md_file.writelines(extracted_entries)
 
 def scan_folders_and_create_md(root_folder, output_md_path):
     """Scans subfolders, prioritizes certain folders, and creates a Markdown file."""
