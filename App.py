@@ -1,7 +1,7 @@
 import os
 import argparse
-from Modules.folder_scanner import scan_folders_and_create_md
-from Modules.markdown_utils import get_unique_md_path
+from folder_scanner import scan_folders_and_create_md
+from markdown_utils import get_unique_md_path
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Scan MHTML files and extract information into a markdown file.")
