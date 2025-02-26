@@ -1,5 +1,5 @@
 import os
-from Modules.file_operations import extract_info_from_mhtml
+from file_operations import extract_info_from_mhtml
 
 PRIORITY_FOLDERS = {"@ Bads", "@ Other", "@ Weak", "@ Dead"}  # Use a set for faster membership checking
 
